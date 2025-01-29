@@ -1,0 +1,78 @@
+{
+	"info": {
+		"_postman_id": "012f0b85-d562-4ba6-9d6a-456c54ba278d",
+		"name": "Check status codes Run",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30218923",
+		"_collection_link": "https://bold-firefly-116952.postman.co/workspace/Test~82f0927d-0867-4eac-a28f-915a61ca373f/collection/30218923-012f0b85-d562-4ba6-9d6a-456c54ba278d?action=share&source=collection_link&creator=30218923"
+	},
+	"item": [
+		{
+			"name": "Check status codes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"/*В базе должы быть: \r",
+							"пользователи: UDP_user *** - 2\r",
+							"компании  UDPC_*** - 2 */\r",
+							"\r",
+							"const assert = require('assert');\r",
+							"var jsonData = pm.response.json();\r",
+							"var count = pm.variables.get(\"count\");\r",
+							"var code = pm.variables.get(\"code\");\r",
+							"\r",
+							"console.log(count);\r",
+							"console.log(code);\r",
+							"\r",
+							"pm.test(\"Количество результатов равно \" + count, function () {\r",
+							"    assert(jsonData.foundCount== count);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Статускод: \" + code, function () {\r",
+							"    pm.response.to.have.status(Number(code));\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(pm.variables.get(\"query\"));\r",
+							"console.log(pm.variables.get(\"fullSimilarity\"));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"query\": \"{{query}}\",\r\n\"fullSimilarity\": {{fullSimilarity}}\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{magicsearch}}",
+					"host": [
+						"{{magicsearch}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

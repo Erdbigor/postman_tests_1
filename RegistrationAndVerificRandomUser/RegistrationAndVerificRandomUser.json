@@ -1,0 +1,173 @@
+{
+	"info": {
+		"_postman_id": "0fc9eeed-602e-4a8a-b675-a840e26d121d",
+		"name": "RegistrationAndVerificRandomUser - bugred.ru",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30218923",
+		"_collection_link": "https://bold-firefly-116952.postman.co/workspace/Test~82f0927d-0867-4eac-a28f-915a61ca373f/collection/30218923-0fc9eeed-602e-4a8a-b675-a840e26d121d?action=share&source=collection_link&creator=30218923"
+	},
+	"item": [
+		{
+			"name": "1 - Регистрация случайного пользователя",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.environment.set(\"name_User\", jsonData.name);",
+							"pm.environment.set(\"email_User\",jsonData.email);",
+							"console.log(pm.environment.get('name_User'));",
+							"console.log(pm.environment.get('email_User'));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "test_demo_{{$randomInt}}@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Демо_{{$randomInt}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://users.bugred.ru/tasks/rest/doregister",
+					"protocol": "http",
+					"host": [
+						"users",
+						"bugred",
+						"ru"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"doregister"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2 - Проверка созданного пользователя",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"var nameUser = pm.environment.get('name_User');\r",
+							"var emailUser = pm.environment.get('email_User');\r",
+							"\r",
+							"console.log(nameUser);\r",
+							"console.log(emailUser);\r",
+							"\r",
+							"pm.test(\"Имя пользователя соответсвует установленному\", function () {\r",
+							"    pm.expect(jsonData.results[0].name).to.eql(nameUser);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Почта пользователя соответсвует установленной\", function () {\r",
+							"    pm.expect(jsonData.results[0].email).to.eql(emailUser);\r",
+							"});\r",
+							"\r",
+							"pm.environment.unset('name_User');\r",
+							"pm.environment.unset('email_User');"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{magicsearch}}?query={{email_User}}",
+					"host": [
+						"{{magicsearch}}"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "{{email_User}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "magicsearch",
+			"value": "http://users.bugred.ru/tasks/rest/magicsearch",
+			"type": "string",
+			"disabled": true
+		}
+	]
+}
